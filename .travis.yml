@@ -2,7 +2,7 @@ sudo: required
 services:
 - docker
 script:
-- export REPO=bigcentech/lzo-sbt
+- export REPO=bigcentech/hadoop-sbt
 - export TAG_TO_USE=${TRAVIS_TAG:-snapshot}
 - docker build -t $REPO:latest .
 - docker tag $REPO:latest $REPO:$TAG_TO_USE
