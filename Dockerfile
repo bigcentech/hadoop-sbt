@@ -5,7 +5,7 @@ ENV REMOTE_SBT_VERSION=1.2.3
 ENV REMOTE_HADOOP_VERSION=2.8.5
 
 RUN apt-get update \
- && apt-get install -yq curl \
+ && apt-get install -yq curl liblzo2-2 \
  && curl -L https://piccolo.link/sbt-$REMOTE_SBT_VERSION.tgz -o /tmp/sbt-$REMOTE_SBT_VERSION.tgz \ 
  && curl -L https://archive.apache.org/dist/hadoop/common/hadoop-$REMOTE_HADOOP_VERSION/hadoop-$REMOTE_HADOOP_VERSION.tar.gz -o /tmp/hadoop-$REMOTE_HADOOP_VERSION.tar.gz  \
  && tar -xzf /tmp/sbt-$REMOTE_SBT_VERSION.tgz -C /usr/local/ \
