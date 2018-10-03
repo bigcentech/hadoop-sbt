@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 USRID=${USER_ID:-9001}
 GRPID=${GROUP_ID:-9001}
 
