@@ -9,4 +9,4 @@ export HOME=/home/sbt
 
 chown -R ${USRID}:${GRPID} $HOME
 
-exec gosu sbt "$@"
+exec gosu "$@"
