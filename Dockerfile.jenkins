@@ -1,0 +1,30 @@
+FROM openjdk:8u181-slim-stretch
+MAINTAINER luis@bigcente.ch
+
+ENV REMOTE_SBT_VERSION=1.2.3
+ENV REMOTE_HADOOP_VERSION=2.8.5
+
+RUN apt-get update \
+ && apt-get install -yq curl gosu liblzo2-2 \
+ && curl -L https://piccolo.link/sbt-$REMOTE_SBT_VERSION.tgz -o /tmp/sbt-$REMOTE_SBT_VERSION.tgz \
+ && curl -L https://archive.apache.org/dist/hadoop/common/hadoop-$REMOTE_HADOOP_VERSION/hadoop-$REMOTE_HADOOP_VERSION.tar.gz -o /tmp/hadoop-$REMOTE_HADOOP_VERSION.tar.gz \
+ && tar -xzf /tmp/sbt-$REMOTE_SBT_VERSION.tgz -C /usr/local/ \
+ && tar -xzf /tmp/hadoop-$REMOTE_HADOOP_VERSION.tar.gz -C /tmp/ \
+ && mkdir /native-libs \
+ && mv /tmp/hadoop-$REMOTE_HADOOP_VERSION/lib/native/lib* /native-libs/ \
+ && apt-get autoclean -y \
+ && rm -rf /tmp/*
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/native-libs
+ENV PATH $PATH:/usr/local/sbt/bin
+
+# Hack to make it work on jenkins
+#
+ENV USER=sbt
+ENV USER_ID=1000
+ENV USER_GID=1000
+ENV HOME=/home/sbt
+
+RUN getent group ${USER_GID} 2>&1 > /dev/null || groupadd -g ${USER_GID} sbt \
+ && useradd --shell /bin/bash -u ${USER_ID} -g ${GRPID} -o -c "sbt user" -m sbt \
+ && chown -R ${USER_ID}:${USER_GID} $HOME
